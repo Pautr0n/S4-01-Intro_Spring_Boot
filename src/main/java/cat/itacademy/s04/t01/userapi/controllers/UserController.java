@@ -29,4 +29,10 @@ public class UserController {
         return newUser;
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable UUID id){
+        return userList.stream().filter(u->u.getId().equals(id)).
+                findFirst().orElseThrow(()->new UserNotFoundException("NotFound(404)"));
+    }
+
 }
