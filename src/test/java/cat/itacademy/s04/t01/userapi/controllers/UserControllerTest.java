@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.UUID;
 
@@ -47,8 +48,24 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById_returnsCorrectUser() {
+    void getUserById_returnsCorrectUser() throws Exception {
+
+        User userRequest = new User(null, "Pau", "pau@pau.com");
+        String userJason = objectMapper.writeValueAsString(userRequest);
+
+        MvcResult result = mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(userJason))
+                .andExpect(status().isOk())
+                .andReturn();
         // Primer afegeix un usuari amb POST
+
+        String responseBody = result.getResponse().getContentAsString();
+        User createdUser = objectMapper.readValue(responseBody,User.class);
+
+        mockMvc.perform(get("/users/{id}", createdUser.getId().toString())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(createdUser.getId().toString()));
         // Després GET /users/{id} i comprova que torni aquest usuari
     }
 
