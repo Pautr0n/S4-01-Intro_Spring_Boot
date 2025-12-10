@@ -70,9 +70,12 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById_returnsNotFoundIfMissing() {
-        // Simula GET /users/{id} amb un id aleatori
-        // Espera 404
+    void getUserById_returnsNotFoundIfMissing() throws Exception {
+        UUID idrandom = UUID.randomUUID();
+        mockMvc.perform(get("/users/{id}", idrandom.toString())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
     }
 
     @Test
