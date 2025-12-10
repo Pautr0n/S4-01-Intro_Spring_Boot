@@ -1,11 +1,17 @@
 package cat.itacademy.s04.t01.userapi.controllers;
 
+import cat.itacademy.s04.t01.userapi.models.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,9 +34,16 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_returnsUserWithId() {
-        // Simula POST /users amb JSON
-        // Espera que torni el mateix usuari amb UUID no nul
+    void createUser_returnsUserWithId() throws Exception {
+        UUID id = UUID.randomUUID();
+        User userRequest = new User(id, "Pau", "pau@pau.com");
+        String userJason = objectMapper.writeValueAsString(userRequest);
+
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                .content(userJason))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNotEmpty());
+
     }
 
     @Test
