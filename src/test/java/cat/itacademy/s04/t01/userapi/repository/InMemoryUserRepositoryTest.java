@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryUserRepositoryTest {
-    private static List<User> userList;
-    private InMemoryUserRepository repository = new InMemoryUserRepository();
-
+    private InMemoryUserRepository repository;
+    private List<User> userList;
     @BeforeEach
     void setUp() {
         userList = new ArrayList<>(List.of(
@@ -22,6 +22,9 @@ class InMemoryUserRepositoryTest {
                 new User(UUID.randomUUID(),"Jose","jose@jose.com"),
                 new User(UUID.randomUUID(),"Abel","abel@abel.com")
         ));
+
+        repository =new InMemoryUserRepository(userList);
+
     }
 
     @Test
@@ -32,11 +35,14 @@ class InMemoryUserRepositoryTest {
 
     @Test
     void findAllReturnsAll() {
-        assertEquals(3  ,repository.findAll());
+        assertEquals(3  ,repository.findAll().size());
     }
 
     @Test
-    void findById() {
+    void findByIdReturnsUser() {
+        UUID id = userList.getFirst().getId();
+        assertSame(userList.get(1),repository.findById(id).get());
+
     }
 
     @Test

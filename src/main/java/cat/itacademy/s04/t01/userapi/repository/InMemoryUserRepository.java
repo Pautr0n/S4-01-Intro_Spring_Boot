@@ -13,6 +13,10 @@ public class InMemoryUserRepository implements UserRepository {
 
     private static List<User> userList = new ArrayList<>();
 
+    public InMemoryUserRepository(List<User> userList) {
+        this.userList = userList;
+    }
+
     @Override
     public User save(User user) {
         userList.add(user);
