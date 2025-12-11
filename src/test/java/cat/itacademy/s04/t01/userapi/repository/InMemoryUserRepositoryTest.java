@@ -41,7 +41,7 @@ class InMemoryUserRepositoryTest {
     @Test
     void findByIdReturnsUser() {
         UUID id = userList.getFirst().getId();
-        assertSame(userList.get(1),repository.findById(id).get());
+        assertSame(userList.get(0),repository.findById(id).get());
 
     }
 
