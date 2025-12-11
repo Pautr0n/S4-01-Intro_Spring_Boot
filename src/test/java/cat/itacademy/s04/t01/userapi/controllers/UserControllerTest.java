@@ -16,8 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -41,7 +39,7 @@ class UserControllerTest {
         String userJason = objectMapper.writeValueAsString(userRequest);
 
         mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
-                .content(userJason))
+                        .content(userJason))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
@@ -60,7 +58,7 @@ class UserControllerTest {
         // Primer afegeix un usuari amb POST
 
         String responseBody = result.getResponse().getContentAsString();
-        User createdUser = objectMapper.readValue(responseBody,User.class);
+        User createdUser = objectMapper.readValue(responseBody, User.class);
 
         mockMvc.perform(get("/users/{id}", createdUser.getId().toString())
                         .accept(MediaType.APPLICATION_JSON))
@@ -79,9 +77,31 @@ class UserControllerTest {
     }
 
     @Test
-    void getUsers_withNameParam_returnsFilteredUsers() {
-        // Afegeix dos usuaris amb POST
-        // Fa GET /users?name=jo i comprova que només torni els que contenen "jo"
+    void getUsers_withNameParam_returnsFilteredUsers() throws Exception {
+
+        User userRequest = new User(null, "Paujo", "pau@pau.com");
+        String userJason = objectMapper.writeValueAsString(userRequest);
+
+        MvcResult userWithJo = mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(userJason))
+                .andExpect(status().isOk()).andReturn();
+
+        String responseBody = userWithJo.getResponse().getContentAsString();
+        User createdUserJo = objectMapper.readValue(responseBody, User.class);
+
+        userRequest = new User(null, "Pau", "pau2@pau.com");
+        userJason = objectMapper.writeValueAsString(userRequest);
+
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(userJason))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/users?name=jo").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("[0].id").value(createdUserJo.getId().toString()));
+
+
     }
 
 }
