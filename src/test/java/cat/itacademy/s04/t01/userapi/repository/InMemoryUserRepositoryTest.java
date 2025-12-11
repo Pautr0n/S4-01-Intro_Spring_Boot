@@ -46,6 +46,11 @@ class InMemoryUserRepositoryTest {
     }
 
     @Test
+    void findByIdReturnsEmpty(){
+        assertEquals(Optional.empty(),repository.findById(UUID.randomUUID()));
+    }
+
+    @Test
     void searchByName() {
     }
 
