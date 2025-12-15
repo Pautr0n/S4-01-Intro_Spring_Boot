@@ -19,8 +19,7 @@ public class UserController {
         if(name == null || name.isBlank()) return userList;
         return userList.stream().
                 filter(u->u.getName() != null &&
-                        u.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
+                        u.getName().toLowerCase().contains(name.toLowerCase())).toList();
     }
 
     @PostMapping

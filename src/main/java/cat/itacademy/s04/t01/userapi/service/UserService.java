@@ -11,7 +11,5 @@ public interface UserService {
     List<User> findAll();
     List<User> searchByName(String name);
     Optional<User> findById(UUID id);
-    User existByEmail(String email);
-
-
+    boolean existByEmail(String email);
 }

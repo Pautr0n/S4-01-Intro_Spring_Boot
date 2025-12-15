@@ -25,7 +25,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return List.copyOf(userList);
+        return new ArrayList<>(userList);
     }
 
     @Override
