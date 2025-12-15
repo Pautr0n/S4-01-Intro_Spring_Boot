@@ -51,10 +51,23 @@ class InMemoryUserRepositoryTest {
     }
 
     @Test
-    void searchByName() {
+    void searchByNameReturnTwo() {
+        assertEquals(2, repository.searchByName("a").size());
+
+    }
+
+    @Test
+    void searchByNameReturnEmpty() {
+        assertEquals(true, repository.searchByName("z").isEmpty());
     }
 
     @Test
     void existsByEmail() {
+        assertEquals(true, repository.existsByEmail("pau@pau.com"));
+    }
+
+    @Test
+    void doesNotExistByEmail(){
+        assertEquals(false, repository.existsByEmail("trump@trump.com"));
     }
 }
