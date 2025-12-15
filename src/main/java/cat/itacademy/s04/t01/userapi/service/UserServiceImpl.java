@@ -33,7 +33,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> searchByName(String name) {
-        return List.of();
+        if (name == null || name.isBlank()){
+            throw new NullPointerException("Cannot provide null or empty string");
+        }
+        return userRepository.searchByName(name);
     }
 
     @Override
