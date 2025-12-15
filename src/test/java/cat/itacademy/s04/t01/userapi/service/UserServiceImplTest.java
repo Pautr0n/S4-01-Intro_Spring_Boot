@@ -72,4 +72,13 @@ class UserServiceImplTest {
         assertFalse(result.isPresent());
     }
 
+    @Test
+    void existByEmailReturnsTrue(){
+        assertTrue(userService.existByEmail("pau@pau.com"));
+    }
+    @Test
+    void existByEmailReturnsFalse(){
+        assertFalse(userService.existByEmail("falso@falso.com"));
+    }
+
 }
