@@ -34,9 +34,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> searchByName(String name) {
-        if (name == null || name.isBlank()){
-            throw new RuntimeException("Cannot provide null or empty string");
-        }
         return userRepository.searchByName(name);
     }
 
@@ -46,7 +43,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User existByEmail(String email) {
-        return null;
+    public boolean existByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }
