@@ -8,6 +8,7 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +56,20 @@ class UserServiceImplTest {
     @Test
     void findUserByNullNameThrowsException(){
         assertThrows(NullPointerException.class, ()->userService.searchByName(null));
+    }
+
+    @Test
+    void findUserByIdFindsUser(){
+        UUID userId = userList.get(0).getId();
+        Optional<User> result = userService.findById(userId);
+        assertTrue(result.isPresent());
+        assertEquals("Pau", result.get().getName());
+    }
+    @Test
+    void findUserByIdReturnsEmpty(){
+        UUID id = UUID.randomUUID();
+        Optional<User> result = userService.findById(id);
+        assertFalse(result.isPresent());
     }
 
 }

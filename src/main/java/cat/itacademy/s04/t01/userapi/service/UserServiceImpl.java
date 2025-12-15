@@ -5,6 +5,7 @@ import cat.itacademy.s04.t01.userapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,14 +35,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> searchByName(String name) {
         if (name == null || name.isBlank()){
-            throw new NullPointerException("Cannot provide null or empty string");
+            throw new RuntimeException("Cannot provide null or empty string");
         }
         return userRepository.searchByName(name);
     }
 
     @Override
-    public User findById(UUID id) {
-        return null;
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
     }
 
     @Override
