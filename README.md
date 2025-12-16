@@ -38,11 +38,11 @@ Before running the project, ensure you have:
 
 ```
 src/main/java/cat/itacademy/s04/t01/userapi
- ├── controllers   		# REST controllers
- ├── models        		# Domain models (User, HealthResponse)
- ├── repository  		# Repository interfaces & implementations
- ├── services      		# Business logic (Service Layer)
- ├── exceptions		# Custom exceptions   
+ ├── controllers   		        # REST controllers
+ ├── models        		        # Domain models (User, HealthResponse)
+ ├── repository  		        # Repository interfaces & implementations
+ ├── services      		        # Business logic (Service Layer)
+ ├── exceptions		            # Custom exceptions   
  └── UserApiApplication.java  	# Main Spring Boot application
 ```
 
