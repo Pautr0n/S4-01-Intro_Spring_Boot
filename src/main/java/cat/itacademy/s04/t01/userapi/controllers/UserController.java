@@ -1,42 +1,37 @@
 package cat.itacademy.s04.t01.userapi.controllers;
 
 import cat.itacademy.s04.t01.userapi.models.User;
+import cat.itacademy.s04.t01.userapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private static List<User> userList = new ArrayList<>();
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
-    public List<User> getUsers(@RequestParam(required = false) String name){
-        if(name == null || name.isBlank()) return userList;
-        return userList.stream().
-                filter(u->u.getName() != null &&
-                        u.getName().toLowerCase().contains(name.toLowerCase())).toList();
+    public List<User> getUsers(@RequestParam(required = false) String name) {
+        if (name == null || name.isBlank()) return userService.findAll();
+        return userService.searchByName(name);
     }
 
     @PostMapping
-    public User insertUser(@RequestBody User userRequest){
-        UUID id = UUID.randomUUID();
-
-        User newUser = new User(id, userRequest.getName(), userRequest.getEmail());
-
-        userList.add(newUser);
-
-        return newUser;
+    public User insertUser(@RequestBody User userRequest) {
+        return userService.createUser(userRequest);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable UUID id){
-        return userList.stream().filter(u->u.getId().equals(id)).
-                findFirst().orElseThrow(()->new UserNotFoundException("NotFound(404)"));
+    public User getUserById(@PathVariable UUID id) {
+        return userService.findById(id).orElseThrow(() -> new UserNotFoundException("NotFound(404)"));
     }
 
 }
